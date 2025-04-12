@@ -9,7 +9,7 @@ export const getUsername = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const user = await User.findById(userId).select('username');
+    const user = await User.findById(userId).select('username score');
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;

@@ -15,7 +15,6 @@ export default function Login() {
     try {
       const { token } = await loginService (username, password);
       login(token); // Store the token in context or local storage
-      alert('Login successful!');
       navigate('/dashboard');
     } catch (err) {
       if (err instanceof AxiosError) {

@@ -6,5 +6,5 @@ export const getUser = async (token: string | null) => {
   const res = await axios.get(`${API_URL}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  return res.data; // This will return { username }
+  return res.data; // { username, score }
 };
