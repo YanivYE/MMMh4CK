@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import { login } from '../services/auth';
+import { login as loginService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { token } = await login(username, password);
-      localStorage.setItem('token', token);
+      const { token } = await loginService (username, password);
+      login(token); // Store the token in context or local storage
       alert('Login successful!');
       navigate('/dashboard');
     } catch (err) {
@@ -25,38 +27,30 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="username" className="block text-sm font-semibold text-gray-600">Username</label>
-            <input 
-              type="text" 
-              id="username" 
-              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" 
-              value={username} 
-              onChange={e => setUsername(e.target.value)} 
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-semibold text-gray-600">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" 
-              value={password} 
-              onChange={e => setPassword(e.target.value)} 
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="w-full p-3 mt-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-          >
-            Login
-          </button>
-        </form>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-lg w-80 space-y-4">
+        <h2 className="text-2xl font-bold text-center">Login</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          className="w-full px-3 py-2 border rounded"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          className="w-full px-3 py-2 border rounded"
+        />
+        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded">
+          Login
+        </button>
+        <p className="text-sm text-center">
+          Don't have an account? <a className="text-blue-600" href="/register">Register</a>
+        </p>
+      </form>
     </div>
   );
 }
