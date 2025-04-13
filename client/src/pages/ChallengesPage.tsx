@@ -1,28 +1,44 @@
 import { useEffect, useState } from 'react';
-import { getUser } from '../services/user';
 import { useNavigate, Link } from 'react-router-dom';
+import { getUser } from '../services/user';
+import { fetchChallenges } from '../services/challenge';
+import ProfileCard from '../components/ProfileCard';
 
-export default function DashboardPage() {
+type Challenge = {
+  _id: string;
+  title: string;
+  description: string;
+  category: string;
+  points: number;
+  completed: boolean;
+};
+
+export default function ChallengesPage() {
   const [username, setUsername] = useState('');
   const [score, setScore] = useState(0);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
       try {
         const user = await getUser(token);
+        const challengeList = await fetchChallenges(token);
+
         setUsername(user.username);
         setScore(user.score ?? 0);
+        setChallenges(challengeList);
       } catch (err) {
         console.error(err);
         navigate('/login');
       }
     };
-    fetchUser();
+
+    fetchData();
   }, [navigate]);
 
   const handleLogout = () => {
@@ -47,7 +63,27 @@ export default function DashboardPage() {
       </aside>
 
       <main className="main-content">
-        <h1>Welcome to the Dashboard!</h1>
+        <section className="challenges-list">
+          <h2 className="challenges-title">Available Challenges</h2>
+          <div className="challenges-grid">
+            {challenges.map((ch) => (
+              <button
+                key={ch._id}
+                className={`challenge-card ${ch.completed ? 'completed' : ''}`}
+                disabled={ch.completed}
+                onClick={() => {
+                  if (!ch.completed) {
+                    console.log('Go to challenge:', ch._id);
+                  }
+                }}
+              >
+                <h3>{ch.title}</h3>
+                <p>Category: {ch.category}</p>
+                <p>Points: {ch.points}</p>
+              </button>
+            ))}
+          </div>
+        </section>
       </main>
 
       <section className="profile-card top-right">

@@ -5,6 +5,7 @@ export interface IUser extends Document {
   password: string;
   role: 'user' | 'admin';
   score: number;
+  completedChallenges: mongoose.Types.ObjectId[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -12,6 +13,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   score: { type: Number, default: 0 },
+  completedChallenges: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Challenge' }],
 });
 
 export const User = mongoose.model<IUser>('User', userSchema);

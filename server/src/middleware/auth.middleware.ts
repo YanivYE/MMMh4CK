@@ -1,4 +1,3 @@
-// src/middleware/authenticateToken.ts
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -6,7 +5,7 @@ interface JwtPayload {
   id: string;
 }
 
-export const authenticateToken = (
+export const auth = (
   req: Request,
   res: Response,
   next: NextFunction

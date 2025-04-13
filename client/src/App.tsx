@@ -4,6 +4,7 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import DashboardPage from "./pages/DashboardPage";
 import { useAuth } from "./context/AuthContext";
+import ChallengesPage from "./pages/ChallengesPage";
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -14,6 +15,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/dashboard" element={isLoggedIn ? <DashboardPage /> : <Navigate to="/login" />} />
+      <Route path="/challenges" element={isLoggedIn ? <ChallengesPage /> : <Navigate to="/login" />} />
     </Routes>
   );
 }
