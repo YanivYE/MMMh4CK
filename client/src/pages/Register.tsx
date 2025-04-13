@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { register } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios'; // Import AxiosError
+import { AxiosError } from 'axios';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -13,9 +13,8 @@ export default function Register() {
     try {
       await register(username, password);
       alert('Registration successful! Please login.');
-      navigate('/login'); // Redirect to login page after successful registration
+      navigate('/login');
     } catch (err) {
-      // Handle the error by typing it as AxiosError
       if (err instanceof AxiosError) {
         alert('Registration failed: ' + err.response?.data?.message || 'Unknown error');
       } else {
@@ -25,21 +24,23 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <h2>Register</h2>
-      <input 
-        type="text" 
-        placeholder="Username" 
-        value={username} 
-        onChange={e => setUsername(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Password" 
-        value={password} 
-        onChange={e => setPassword(e.target.value)} 
-      />
-      <button type="submit">Register</button>
-    </form>
+    <div className="auth-container">
+      <form onSubmit={handleRegister} className="auth-form">
+        <h2>Register</h2>
+        <input 
+          type="text" 
+          placeholder="Username" 
+          value={username} 
+          onChange={e => setUsername(e.target.value)} 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={e => setPassword(e.target.value)} 
+        />
+        <button type="submit">Register</button>
+      </form>
+    </div>
   );
 }
