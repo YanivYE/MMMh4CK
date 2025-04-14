@@ -4,7 +4,7 @@ import { auth } from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.post('/', auth, getChallenges);
-router.post('/:id/submit', auth, submitFlag);
+router.get('/', auth, getChallenges);
+router.post('/id/submit', auth, submitFlag);
 
 export default router;

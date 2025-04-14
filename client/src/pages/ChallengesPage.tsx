@@ -1,17 +1,10 @@
+// src/pages/ChallengesPage.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getUser } from '../services/user';
 import { fetchChallenges } from '../services/challenge';
 import ProfileCard from '../components/ProfileCard';
-
-type Challenge = {
-  _id: string;
-  title: string;
-  description: string;
-  category: string;
-  points: number;
-  completed: boolean;
-};
+import ChallengeCard, { Challenge } from '../components/ChallengeCard';
 
 export default function ChallengesPage() {
   const [username, setUsername] = useState('');
@@ -24,11 +17,9 @@ export default function ChallengesPage() {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
-
       try {
         const user = await getUser(token);
         const challengeList = await fetchChallenges(token);
-
         setUsername(user.username);
         setScore(user.score ?? 0);
         setChallenges(challengeList);
@@ -37,9 +28,17 @@ export default function ChallengesPage() {
         navigate('/login');
       }
     };
-
     fetchData();
   }, [navigate]);
+
+  // This function is called when a flag submission marks the challenge as solved.
+  const handleFlagSubmit = (challengeId: string, solved: boolean) => {
+    if (solved) {
+      setChallenges(prev =>
+        prev.map(ch => (ch._id === challengeId ? { ...ch, completed: true } : ch))
+      );
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -66,21 +65,8 @@ export default function ChallengesPage() {
         <section className="challenges-list">
           <h2 className="challenges-title">Available Challenges</h2>
           <div className="challenges-grid">
-            {challenges.map((ch) => (
-              <button
-                key={ch._id}
-                className={`challenge-card ${ch.completed ? 'completed' : ''}`}
-                disabled={ch.completed}
-                onClick={() => {
-                  if (!ch.completed) {
-                    console.log('Go to challenge:', ch._id);
-                  }
-                }}
-              >
-                <h3>{ch.title}</h3>
-                <p>Category: {ch.category}</p>
-                <p>Points: {ch.points}</p>
-              </button>
+            {challenges.map(ch => (
+              <ChallengeCard key={ch._id} challenge={ch} onFlagSubmit={handleFlagSubmit} />
             ))}
           </div>
         </section>
