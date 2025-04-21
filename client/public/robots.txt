@@ -1,0 +1,13 @@
+# Allow all well‑behaved crawlers to index your public pages…
+User-agent: *
+Disallow:
+
+# but prevent them from hitting API endpoints or auth pages
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /challenges/*/submit
+
+# If you publish a sitemap, let crawlers know where it is
+Sitemap: https://your-domain.com/sitemap.xml

@@ -98,3 +98,141 @@ export default function ChallengesPage() {
     </div>
   );
 }
+
+// import React, { useState, useEffect } from "react";
+// import { Challenge, Submission, User } from "@/entities/all";
+// import { Button } from "@/components/ui/button";
+// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { Alert, AlertDescription } from "@/components/ui/alert";
+// import { CheckCircle, XCircle } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+// import { createPageUrl } from "@/utils";
+// import ChallengeCard from "../components/challenges/ChallengeCard";
+
+// export default function Challenges() {
+//   const [challenges, setChallenges] = useState([]);
+//   const [submissions, setSubmissions] = useState([]);
+//   const [category, setCategory] = useState("all");
+//   const [user, setUser] = useState(null);
+//   const [result, setResult] = useState(null);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const init = async () => {
+//       try {
+//         const userData = await User.me();
+//         setUser(userData);
+//         const [challengesData, submissionsData] = await Promise.all([
+//           Challenge.list(),
+//           Submission.list()
+//         ]);
+//         setChallenges(challengesData);
+//         setSubmissions(submissionsData);
+//       } catch (error) {
+//         // User not logged in - redirect to auth page
+//         navigate(createPageUrl("Auth"));
+//         const challengesData = await Challenge.list();
+//         setChallenges(challengesData);
+//       }
+//     };
+//     init();
+//   }, [navigate]);
+
+//   const handleSubmit = async (challengeId, flag) => {
+//     if (!user) {
+//       User.login();
+//       return;
+//     }
+    
+//     const challenge = challenges.find(c => c.id === challengeId);
+//     const isCorrect = challenge.flag === flag;
+    
+//     await Submission.create({
+//       challenge_id: challengeId,
+//       flag_submitted: flag,
+//       is_correct: isCorrect
+//     });
+
+//     setResult({
+//       success: isCorrect,
+//       message: isCorrect 
+//         ? `Congratulations! You found the flag for "${challenge.title}".` 
+//         : "Incorrect flag, try again!"
+//     });
+
+//     const [challengesData, submissionsData] = await Promise.all([
+//       Challenge.list(),
+//       Submission.list()
+//     ]);
+//     setChallenges(challengesData);
+//     setSubmissions(submissionsData);
+//   };
+
+//   const closeResult = () => {
+//     setResult(null);
+//   };
+
+//   const filteredChallenges = category === "all" 
+//     ? challenges 
+//     : challenges.filter(c => c.category === category);
+
+//   return (
+//     <div>
+//       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+//         <div>
+//           <h1 className="text-3xl font-bold text-white mb-2">Capture The Flag</h1>
+//           <p className="text-gray-400">Solve challenges, find flags, climb the leaderboard!</p>
+//         </div>
+        
+//         <Tabs defaultValue="all" onValueChange={setCategory}>
+//           <TabsList className="bg-gray-800">
+//             <TabsTrigger value="all">All</TabsTrigger>
+//             <TabsTrigger value="web">Web</TabsTrigger>
+//             <TabsTrigger value="crypto">Crypto</TabsTrigger>
+//             <TabsTrigger value="forensics">Forensics</TabsTrigger>
+//             <TabsTrigger value="reverse">Reverse</TabsTrigger>
+//             <TabsTrigger value="pwn">Pwn</TabsTrigger>
+//             <TabsTrigger value="misc">Misc</TabsTrigger>
+//           </TabsList>
+//         </Tabs>
+//       </div>
+
+//       {result && (
+//         <Alert
+//           className={`mb-6 ${
+//             result.success ? "bg-green-900/20 border-green-900" : "bg-red-900/20 border-red-900"
+//           }`}
+//         >
+//           <div className="flex items-center gap-2">
+//             {result.success ? (
+//               <CheckCircle className="h-5 w-5 text-green-500" />
+//             ) : (
+//               <XCircle className="h-5 w-5 text-red-500" />
+//             )}
+//             <AlertDescription className="text-white">{result.message}</AlertDescription>
+//           </div>
+//           <Button
+//             variant="ghost"
+//             size="sm"
+//             onClick={closeResult}
+//             className="absolute top-3 right-3 text-gray-400 hover:text-white"
+//           >
+//             Dismiss
+//           </Button>
+//         </Alert>
+//       )}
+
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//         {filteredChallenges.map(challenge => (
+//           <ChallengeCard
+//             key={challenge.id}
+//             challenge={challenge}
+//             solved={submissions.some(s => s.challenge_id === challenge.id && s.is_correct)}
+//             onSubmit={handleSubmit}
+//             isLoggedIn={!!user}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }

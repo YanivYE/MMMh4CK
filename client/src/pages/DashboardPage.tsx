@@ -1,78 +1,32 @@
-import { useEffect, useState } from 'react';
-import { getUser } from '../services/user';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { getUser } from "../services/user";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardPage() {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [score, setScore] = useState(0);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) return;
-
       try {
         const user = await getUser(token);
         setUsername(user.username);
         setScore(user.score ?? 0);
       } catch (err) {
         console.error(err);
-        navigate('/login');
+        navigate("/login");
       }
     };
     fetchUser();
   }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
-
   return (
-    <div className="dashboard-container">
-      <aside className="sidebar">
-        <h2 className="sidebar-title">CTF Dashboard</h2>
-        <nav className="sidebar-nav">
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/challenges">Challenges</Link>
-          <Link to="/profile">Profile</Link>
-        </nav>
-        <div className="logout-container">
-          <button className="logout-button" onClick={() => setShowLogoutModal(true)}>
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      <main className="main-content">
-        <h1>Welcome to the Dashboard!</h1>
-      </main>
-
-      <section className="profile-card top-right">
-        <img
-          src={`https://ui-avatars.com/api/?name=${username}&background=random`}
-          alt="avatar"
-          className="profile-avatar"
-        />
-        <div className="profile-info">
-          <h2>{username}</h2>
-          <p>Score: {score}</p>
-        </div>
-      </section>
-
-      {showLogoutModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <p>Are you sure you want to logout?</p>
-            <div className="modal-buttons">
-              <button onClick={handleLogout}>Yes</button>
-              <button onClick={() => setShowLogoutModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="text-center text-white mt-10">
+      <h1 className="text-3xl font-bold">Welcome, {username}!</h1>
+      <p className="text-gray-400">Your current score: {score}</p>
     </div>
   );
 }
