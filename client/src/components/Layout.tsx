@@ -1,17 +1,10 @@
-import React, { ReactNode } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { createPageUrl } from "../utils/createPageUrl";
+import React from "react";
+import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Flag, Trophy, Home, Menu, X, LogOut, LogIn } from "lucide-react";
 import { Button } from "./ui/Button";
 import { User } from "../entities/User";
 
-// Define props for the Layout component
-interface LayoutProps {
-  children: ReactNode;
-  currentPageName?: string;
-}
-
-export default function Layout({ children, currentPageName }: LayoutProps) {
+export default function Layout() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [user, setUser] = React.useState<User | null>(null);
   const navigate = useNavigate();
@@ -33,15 +26,15 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
     try {
       await User.logout();
       setUser(null);
-      navigate(createPageUrl("Auth"));
+      navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
-  // Don't show navigation on Auth page
-  if (location.pathname === createPageUrl("Auth")) {
-    return <>{children}</>;
+  // Don't show layout on login/register pages
+  if (location.pathname.startsWith("/login") || location.pathname.startsWith("/register")) {
+    return <Outlet />;
   }
 
   return (
@@ -50,29 +43,29 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link to={createPageUrl("")} className="flex items-center gap-2">
+              <Link to="/dashboard" className="flex items-center gap-2">
                 <Flag className="h-8 w-8 text-indigo-500" />
-                <span className="font-bold text-xl">CTF Platform</span>
+                <span className="font-bold text-xl">MMMH4CK CTFs</span>
               </Link>
             </div>
 
             {/* Desktop nav */}
             <div className="hidden md:block">
               <div className="flex items-center gap-4">
-                <Link to={createPageUrl("")}>
+                <Link to="/challenges">
                   <Button variant="ghost" className="text-gray-300 hover:text-white">
                     <Home className="h-5 w-5 mr-2" />
                     Challenges
                   </Button>
                 </Link>
-                <Link to={createPageUrl("Leaderboard")}>
+                <Link to="/leaderboard">
                   <Button variant="ghost" className="text-gray-300 hover:text-white">
                     <Trophy className="h-5 w-5 mr-2" />
                     Leaderboard
                   </Button>
                 </Link>
                 {!user ? (
-                  <Link to={createPageUrl("Auth")}>
+                  <Link to="/login">
                     <Button className="bg-indigo-600 hover:bg-indigo-700">
                       <LogIn className="h-5 w-5 mr-2" />
                       Sign In
@@ -114,20 +107,20 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <Link to={createPageUrl("")}>
+              <Link to="/challenges">
                 <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white">
                   <Home className="h-5 w-5 mr-2" />
                   Challenges
                 </Button>
               </Link>
-              <Link to={createPageUrl("Leaderboard")}>
+              <Link to="/leaderboard">
                 <Button variant="ghost" className="w-full text-left text-gray-300 hover:text-white">
                   <Trophy className="h-5 w-5 mr-2" />
                   Leaderboard
                 </Button>
               </Link>
               {!user ? (
-                <Link to={createPageUrl("Auth")}>
+                <Link to="/login">
                   <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
                     <LogIn className="h-5 w-5 mr-2" />
                     Sign In
@@ -148,7 +141,7 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
+        <Outlet />
       </main>
     </div>
   );

@@ -13,29 +13,22 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route
-        path="/dashboard"
-        element={isLoggedIn ? <DashboardPage /> : <Navigate to="/login" />}
-      />
-      <Route
-        path="/challenges"
-        element={isLoggedIn ? <ChallengesPage /> : <Navigate to="/login" />}
-      />
-      <Route
-        path="/*"
-        element={
-          <Layout currentPageName="Challenges">
-            <Routes>
-              <Route index element={<ChallengesPage />} />
-              {/* <Route path="leaderboard" element={<LeaderboardPage />} /> */}
-            </Routes>
-          </Layout>
-        }
-      />
-    </Routes>
+    <Route path="/" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
+    <Route path="/login" element={<LoginPage />} />
+    <Route path="/register" element={<RegisterPage />} />
+
+    {isLoggedIn && (
+      <Route element={<Layout />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/challenges" element={<ChallengesPage />} />
+        {/* <Route path="/leaderboard" element={<LeaderboardPage />} /> */}
+      </Route>
+    )}
+
+    {/* fallback route for not found or unauthorized */}
+    <Route path="*" element={<Navigate to={isLoggedIn ? "/dashboard" : "/login"} />} />
+  </Routes>
+
   );
 }
 
