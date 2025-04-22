@@ -1,14 +1,21 @@
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from "./ui/Input";
 
-export default function ChallengeFilters({ 
-  activeCategory, 
+type ChallengeFiltersProps = {
+  activeCategory: string;
+  setActiveCategory: (value: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+};
+
+export default function ChallengeFilters({
+  activeCategory,
   setActiveCategory,
   searchQuery,
-  setSearchQuery
-}) {
+  setSearchQuery,
+}: ChallengeFiltersProps) {
   return (
     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
       <Tabs defaultValue={activeCategory} onValueChange={setActiveCategory}>
@@ -22,7 +29,7 @@ export default function ChallengeFilters({
           <TabsTrigger value="misc">Misc</TabsTrigger>
         </TabsList>
       </Tabs>
-      
+
       <div className="relative w-full md:w-60">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
         <Input

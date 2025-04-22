@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { getUser } from "../services/user";
 import { fetchChallenges, submitFlag } from "../services/challenge";
 import ChallengeCard from "../components/ChallengeCard";
+import ChallengeFilters from "../components/ChallengeFilters"; 
 import { Challenge } from "../../../shared/types/challenge";
-
-const categories = ["all", "web", "crypto", "forensics", "reverse", "pwn", "misc"];
 
 export default function ChallengesPage() {
   const [username, setUsername] = useState<string>("");
@@ -65,7 +64,6 @@ export default function ChallengesPage() {
       };
     }
   };
-  
 
   const filtered = challenges.filter(ch =>
     (category === "all" || ch.category === category) &&
@@ -73,30 +71,26 @@ export default function ChallengesPage() {
   );
 
   return (
-    <div className="flex gap-6">
-      <aside className="w-48 bg-gray-800 p-4 rounded-lg border border-gray-700 self-start">
-        <h2 className="text-white font-bold mb-4">Categories</h2>
-        <ul className="space-y-2">
-          {categories.map(cat => (
-            <li key={cat}>
-              <button
-                onClick={() => setCategory(cat)}
-                className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium ${
-                  cat === category ? "bg-indigo-600 text-white" : "text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </aside>
-
-      <main className="flex-1">
-        <h1 className="text-3xl font-bold text-white mb-4">Capture The Flag</h1>
-        <p className="text-gray-400 mb-6">Solve challenges, find flags, climb the leaderboard!</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(challenge => (
+    <div className="px-4 md:px-8 py-6 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold text-white mb-2">Capture The Flag</h1>
+      <p className="text-gray-400 mb-6">Solve challenges, find flags, climb the leaderboard!</p>
+  
+      {/* ✅ Filters at the top */}
+      <ChallengeFilters
+        activeCategory={category}
+        setActiveCategory={setCategory}
+        searchQuery={search}
+        setSearchQuery={setSearch}
+      />
+  
+      {/* ✅ Conditional message if no matches */}
+      {filtered.length === 0 ? (
+        <div className="text-gray-400 text-center py-8">
+          No challenges found.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((challenge) => (
             <ChallengeCard
               key={challenge._id}
               challenge={challenge}
@@ -106,7 +100,8 @@ export default function ChallengesPage() {
             />
           ))}
         </div>
-      </main>
+      )}
     </div>
   );
+  
 }

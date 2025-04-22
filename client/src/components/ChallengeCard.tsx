@@ -171,12 +171,12 @@ export default function ChallengeCard({
           </Button>
         ) : (
           <>
-            <div className="flex gap-2 w-full">
+            <div className="flex w-full gap-2">
               <Input
                 value={flag}
                 onChange={(e) => setFlag(e.target.value)}
                 placeholder="Enter flag"
-                className="bg-gray-700 border-gray-600 text-white"
+                className="flex-1 bg-gray-700 border-gray-600 text-white"
               />
               <Button
                 onClick={handleSubmit}
@@ -185,6 +185,7 @@ export default function ChallengeCard({
                 Submit
               </Button>
             </div>
+
 
             {/* ✅ Inline result message */}
             {result && (
