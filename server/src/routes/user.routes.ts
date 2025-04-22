@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { getUsername } from '../controllers/user.controller';
+import { logoutUser, getUsername } from '../controllers/user.controller';
 import { auth } from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.get('/me', auth, getUsername); // Token must be valid before calling getUsername
+router.get('/me', auth, getUsername); 
+router.post('/logout', auth, logoutUser);
 
 export default router;

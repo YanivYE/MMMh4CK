@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/Card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/Card"; // Ensure CardContent supports className prop
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
-import { LockIcon, Flag, CheckCircle2, Download, Terminal } from "lucide-react";
-import { Challenge } from "../types/types";
+import { LockIcon, Flag, CheckCircle2, Download, Terminal, X } from "lucide-react";
+import { Challenge, ChallengeCategory, ChallengeDifficulty } from "../../../shared/types/challenge";
 
 type ChallengeCardProps = {
   challenge: Challenge;
   solved: boolean;
-  onSubmit: (challengeId: string, solved: boolean) => void;
+  onSubmit: (challengeId: string, flag: string) => void; 
   isLoggedIn: boolean;
   onOpen?: () => void;
 };
 
-const difficultyColors = {
+const difficultyColors: Record<ChallengeDifficulty, string> = {
   easy: "bg-green-500/10 text-green-500",
   medium: "bg-yellow-500/10 text-yellow-500",
   hard: "bg-red-500/10 text-red-500"
 };
 
-const categoryColors = {
+const categoryColors: Record<ChallengeCategory, string> = {
   web: "bg-blue-500/10 text-blue-500",
   crypto: "bg-purple-500/10 text-purple-500",
   forensics: "bg-green-500/10 text-green-500",
@@ -29,15 +29,17 @@ const categoryColors = {
   misc: "bg-gray-500/10 text-gray-400"
 };
 
-export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn, onOpen }: ChallengeCardProps) {
+export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn }: ChallengeCardProps) {
   const [flag, setFlag] = useState("");
   const [showHint, setShowHint] = useState(false);
+  const [result, setResult] = useState<null | { success: boolean; message: string }>(null);
 
   return (
-    <Card className="bg-gray-800 border-gray-700 overflow-hidden relative">
+    <Card className="bg-gray-800 border-gray-700 overflow-hidden relative flex flex-col justify-between min-h-[400px] w-full">
       {solved && (
         <div className="absolute -right-8 -top-8 w-16 h-16 bg-green-500 rotate-45" />
       )}
+
       <CardHeader>
         <div className="flex justify-between items-start">
           <CardTitle className="text-xl text-white">{challenge.title}</CardTitle>
@@ -50,12 +52,12 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
             </Badge>
           </div>
         </div>
+        <p className="text-gray-400 mt-2">{challenge.description}</p>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-400 mb-4">{challenge.description}</p>
 
+      <CardContent>
         {challenge.file_url && (
-          <div className="mb-4">
+          <div>
             <a
               href={challenge.file_url}
               download
@@ -70,8 +72,8 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
         )}
 
         {challenge.server_details && (
-          <div className="mb-4 p-3 bg-gray-900 rounded-md border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-2">
+          <div className="p-3 bg-gray-900 rounded-md border border-gray-700">
+            <div className="flex items-center gap-2 text-gray-400 mb-1">
               <Terminal className="w-4 h-4" />
               <span>Connection Details:</span>
             </div>
@@ -82,7 +84,7 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
         )}
 
         {challenge.hint && (
-          <div className="mb-4">
+          <div>
             <Button
               variant="ghost"
               size="sm"
@@ -96,13 +98,14 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
             )}
           </div>
         )}
+      </CardContent>
 
+      <CardFooter className="flex flex-col gap-3 pt-3 border-t border-gray-700">
         <div className="flex items-center gap-2 text-lg font-semibold text-yellow-500">
           <Flag className="w-5 h-5" />
-          {challenge.points} points
+          {challenge.score} points
         </div>
-      </CardContent>
-      <CardFooter className="bg-gray-850 border-t border-gray-700 mt-4">
+
         {solved ? (
           <div className="flex items-center gap-2 text-green-500">
             <CheckCircle2 className="w-5 h-5" />
@@ -110,7 +113,7 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
           </div>
         ) : !isLoggedIn ? (
           <Button
-            onClick={() => onSubmit(challenge._id, false)}
+            onClick={() => onSubmit(challenge._id, flag)}
             className="w-full bg-gray-700 hover:bg-gray-600"
           >
             <LockIcon className="w-4 h-4 mr-2" />
@@ -125,11 +128,26 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn,
               className="bg-gray-700 border-gray-600 text-white"
             />
             <Button
-              onClick={() => onSubmit(challenge._id, flag === challenge.flag)}
+              onClick={() => onSubmit(challenge._id, flag)}
               className="bg-indigo-600 hover:bg-indigo-700"
             >
               Submit
             </Button>
+            {result && (
+              <div className={`mt-4 p-3 rounded text-sm font-medium border 
+                ${result.success 
+                  ? 'bg-green-900/20 text-green-400 border-green-700' 
+                  : 'bg-red-900/20 text-red-400 border-red-700'}
+              `}>
+                <div className="flex justify-between items-center">
+                  <span>{result.message}</span>
+                  <button onClick={() => setResult(null)} className="text-xs text-gray-400 hover:text-white">
+                  X
+                  </button>
+                </div>
+              </div>
+            )}
+
           </div>
         )}
       </CardFooter>

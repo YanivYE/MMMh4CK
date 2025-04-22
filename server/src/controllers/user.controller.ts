@@ -20,3 +20,12 @@ export const getUsername = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const logoutUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // With token-based auth, just "invalidate" on client (no need to clear server session)
+    res.status(200).json({ message: 'Logged out' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

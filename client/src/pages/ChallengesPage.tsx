@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../services/user";
-import { fetchChallenges } from "../services/challenge";
+import { fetchChallenges, submitFlag } from "../services/challenge";
 import ChallengeCard from "../components/ChallengeCard";
-import { Challenge } from "../types/types";
+import { Challenge } from "../../../shared/types/challenge";
 
 const categories = ["all", "web", "crypto", "forensics", "reverse", "pwn", "misc"];
 
@@ -35,11 +35,18 @@ export default function ChallengesPage() {
     fetchData();
   }, [navigate]);
 
-  const handleFlagSubmit = (challengeId: string, solved: boolean) => {
-    if (solved) {
+  const handleFlagSubmit = async (challengeId: string, flag: string) => {
+    try {
+      const result = await submitFlag(challengeId, flag);
+  
+      // Update challenge completion state and score
       setChallenges(prev =>
         prev.map(ch => (ch._id === challengeId ? { ...ch, completed: true } : ch))
       );
+      setScore(result.newScore ?? score);
+  
+    } catch (err: any) {
+      alert(`❌ Incorrect flag`);
     }
   };
 
@@ -50,7 +57,7 @@ export default function ChallengesPage() {
 
   return (
     <div className="flex gap-6">
-      <aside className="w-48 bg-gray-800 p-4 rounded-lg border border-gray-700">
+      <aside className="w-48 bg-gray-800 p-4 rounded-lg border border-gray-700 self-start">
         <h2 className="text-white font-bold mb-4">Categories</h2>
         <ul className="space-y-2">
           {categories.map(cat => (
@@ -66,13 +73,6 @@ export default function ChallengesPage() {
             </li>
           ))}
         </ul>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search..."
-          className="mt-6 w-full p-2 rounded bg-gray-900 border border-gray-700 text-white"
-        />
       </aside>
 
       <main className="flex-1">

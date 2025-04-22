@@ -3,21 +3,26 @@ import { User } from '../models/user.model';
 import { Challenge } from '../models/challenge.model';
 
 export const getChallenges: RequestHandler = async (req, res) => {
-    const userId = (req as any).user?.id; 
-    const user = await User.findById(userId).populate('completedChallenges');
-    const challenges = await Challenge.find();
-  
-    const data = challenges.map(ch => ({
-      _id: ch._id,
-      title: ch.title,
-      description: ch.description,
-      score: ch.score,
-      category: ch.category,
-      completed: user?.completedChallenges?.some(c => (c._id as any).equals(ch._id as any)) ?? false,
-    }));
-  
-    res.json(data);
+  const userId = (req as any).user?.id; 
+  const user = await User.findById(userId).populate('completedChallenges');
+  const challenges = await Challenge.find();
+
+  const data = challenges.map(ch => ({
+    _id: ch._id,
+    title: ch.title,
+    description: ch.description,
+    score: ch.score,
+    category: ch.category,
+    difficulty: ch.difficulty,
+    file_url: ch.file_url,
+    hint: ch.hint,
+    server_details: ch.server_details,
+    completed: user?.completedChallenges?.some(c => (c._id as any).equals(ch._id)) ?? false,
+  }));
+
+  res.json(data);
 };
+
 
 export const submitFlag: RequestHandler = async (req, res) => {
     const userId = (req as any).user?.id;

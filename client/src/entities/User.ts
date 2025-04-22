@@ -1,49 +1,49 @@
 export interface User {
-  id: string;
-  full_name: string;
-  email: string;
-}
+    _id: string;      // or "id" depending on what Mongo returns
+    username: string;
+    score: number;
+  }  
 
 export const User = {
-  /**
-   * Fetch the current logged-in user.
-   * @returns {Promise<User>} The user data.
-   */
-  async me(): Promise<User> {
-    try {
-      const response = await fetch("/api/user/me", {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+    async me(): Promise<User> {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+  
+        return await response.json();
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error;
       }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error;
-    }
-  },
-
-  /**
-   * Log out the current user.
-   * @returns {Promise<void>}
-   */
-  async logout(): Promise<void> {
-    try {
-      const response = await fetch("/api/user/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to log out");
+    },
+  
+    async logout(): Promise<void> {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("/api/user/logout", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to log out");
+        }
+  
+        localStorage.removeItem("token");
+      } catch (error) {
+        console.error("Error logging out:", error);
+        throw error;
       }
-    } catch (error) {
-      console.error("Error logging out:", error);
-      throw error;
-    }
-  },
-};
+    },
+  };
+  
