@@ -1,38 +1,84 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/Card"; // Ensure CardContent supports className prop
-import { Input } from "./ui/Input";
-import { Button } from "./ui/Button";
-import { Badge } from "./ui/Badge";
-import { LockIcon, Flag, CheckCircle2, Download, Terminal, X } from "lucide-react";
-import { Challenge, ChallengeCategory, ChallengeDifficulty } from "../../../shared/types/challenge";
+import React, { useState, useEffect } from 'react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from './ui/Card';
+import { Input } from './ui/Input';
+import { Button } from './ui/Button';
+import { Badge } from './ui/Badge';
+import {
+  LockIcon,
+  Flag,
+  CheckCircle2,
+  Download,
+  Terminal,
+  X,
+} from 'lucide-react';
+import {
+  Challenge,
+  ChallengeCategory,
+  ChallengeDifficulty,
+} from '../../../shared/types/challenge';
 
 type ChallengeCardProps = {
   challenge: Challenge;
   solved: boolean;
-  onSubmit: (challengeId: string, flag: string) => void; 
+  onSubmit: (challengeId: string, flag: string) => Promise<{
+    success: boolean;
+    message: string;
+  }>;
   isLoggedIn: boolean;
   onOpen?: () => void;
 };
 
 const difficultyColors: Record<ChallengeDifficulty, string> = {
-  easy: "bg-green-500/10 text-green-500",
-  medium: "bg-yellow-500/10 text-yellow-500",
-  hard: "bg-red-500/10 text-red-500"
+  easy: 'bg-green-500/10 text-green-500',
+  medium: 'bg-yellow-500/10 text-yellow-500',
+  hard: 'bg-red-500/10 text-red-500',
 };
 
 const categoryColors: Record<ChallengeCategory, string> = {
-  web: "bg-blue-500/10 text-blue-500",
-  crypto: "bg-purple-500/10 text-purple-500",
-  forensics: "bg-green-500/10 text-green-500",
-  reverse: "bg-yellow-500/10 text-yellow-500",
-  pwn: "bg-red-500/10 text-red-500",
-  misc: "bg-gray-500/10 text-gray-400"
+  web: 'bg-blue-500/10 text-blue-500',
+  crypto: 'bg-purple-500/10 text-purple-500',
+  forensics: 'bg-green-500/10 text-green-500',
+  reverse: 'bg-yellow-500/10 text-yellow-500',
+  pwn: 'bg-red-500/10 text-red-500',
+  misc: 'bg-gray-500/10 text-gray-400',
 };
 
-export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn }: ChallengeCardProps) {
-  const [flag, setFlag] = useState("");
+export default function ChallengeCard({
+  challenge,
+  solved,
+  onSubmit,
+  isLoggedIn,
+}: ChallengeCardProps) {
+  const [flag, setFlag] = useState('');
   const [showHint, setShowHint] = useState(false);
-  const [result, setResult] = useState<null | { success: boolean; message: string }>(null);
+  const [result, setResult] = useState<null | {
+    success: boolean;
+    message: string;
+  }>(null);
+
+  const handleSubmit = async () => {
+    if (!flag) return;
+    const submissionResult = await onSubmit(challenge._id, flag);
+    setResult(submissionResult);
+
+    if (submissionResult.success) {
+      setFlag('');
+    }
+  };
+
+  // ✅ Auto-dismiss result after 5 seconds
+  useEffect(() => {
+    if (result) {
+      const timeout = setTimeout(() => setResult(null), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [result]);
 
   return (
     <Card className="bg-gray-800 border-gray-700 overflow-hidden relative flex flex-col justify-between min-h-[400px] w-full">
@@ -57,18 +103,16 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn 
 
       <CardContent>
         {challenge.file_url && (
-          <div>
-            <a
-              href={challenge.file_url}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors"
-            >
-              <Download className="w-4 h-4" />
-              Download Challenge File
-            </a>
-          </div>
+          <a
+            href={challenge.file_url}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Download Challenge File
+          </a>
         )}
 
         {challenge.server_details && (
@@ -91,7 +135,7 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn 
               onClick={() => setShowHint(!showHint)}
               className="text-gray-400 hover:text-white"
             >
-              {showHint ? "Hide Hint" : "Show Hint"}
+              {showHint ? 'Hide Hint' : 'Show Hint'}
             </Button>
             {showHint && (
               <p className="mt-2 text-sm text-gray-500 italic">{challenge.hint}</p>
@@ -120,35 +164,44 @@ export default function ChallengeCard({ challenge, solved, onSubmit, isLoggedIn 
             Login to Submit Flag
           </Button>
         ) : (
-          <div className="flex gap-2 w-full">
-            <Input
-              value={flag}
-              onChange={(e) => setFlag(e.target.value)}
-              placeholder="Enter flag"
-              className="bg-gray-700 border-gray-600 text-white"
-            />
-            <Button
-              onClick={() => onSubmit(challenge._id, flag)}
-              className="bg-indigo-600 hover:bg-indigo-700"
-            >
-              Submit
-            </Button>
+          <>
+            <div className="flex gap-2 w-full">
+              <Input
+                value={flag}
+                onChange={(e) => setFlag(e.target.value)}
+                placeholder="Enter flag"
+                className="bg-gray-700 border-gray-600 text-white"
+              />
+              <Button
+                onClick={handleSubmit}
+                className="bg-indigo-600 hover:bg-indigo-700"
+              >
+                Submit
+              </Button>
+            </div>
+
+            {/* ✅ Inline result message */}
             {result && (
-              <div className={`mt-4 p-3 rounded text-sm font-medium border 
-                ${result.success 
-                  ? 'bg-green-900/20 text-green-400 border-green-700' 
-                  : 'bg-red-900/20 text-red-400 border-red-700'}
-              `}>
+              <div
+                className={`mt-2 p-3 rounded text-sm font-medium border transition-all duration-300 
+                  ${
+                    result.success
+                      ? 'bg-green-900/20 text-green-400 border-green-700'
+                      : 'bg-red-900/20 text-red-400 border-red-700'
+                  }`}
+              >
                 <div className="flex justify-between items-center">
                   <span>{result.message}</span>
-                  <button onClick={() => setResult(null)} className="text-xs text-gray-400 hover:text-white">
-                  X
+                  <button
+                    onClick={() => setResult(null)}
+                    className="text-xs text-gray-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
             )}
-
-          </div>
+          </>
         )}
       </CardFooter>
     </Card>

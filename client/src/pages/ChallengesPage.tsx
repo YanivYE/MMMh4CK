@@ -39,16 +39,33 @@ export default function ChallengesPage() {
     try {
       const result = await submitFlag(challengeId, flag);
   
-      // Update challenge completion state and score
+      // ✅ If the request succeeds, treat it as a correct flag
       setChallenges(prev =>
         prev.map(ch => (ch._id === challengeId ? { ...ch, completed: true } : ch))
       );
       setScore(result.newScore ?? score);
   
+      return {
+        success: true,
+        message: `🎉 Correct! You solved "${result.title}"`,
+      };
+  
     } catch (err: any) {
-      alert(`❌ Incorrect flag`);
+      // ❌ Handle incorrect flags (400) and other errors
+      if (err.response && err.response.status === 400) {
+        return {
+          success: false,
+          message: err.response.data?.message || "❌ Incorrect flag. Try again.",
+        };
+      }
+  
+      return {
+        success: false,
+        message: "❌ An unexpected error occurred. Please try again later.",
+      };
     }
   };
+  
 
   const filtered = challenges.filter(ch =>
     (category === "all" || ch.category === category) &&
