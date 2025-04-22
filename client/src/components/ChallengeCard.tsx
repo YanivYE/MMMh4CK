@@ -22,6 +22,7 @@ import {
   ChallengeCategory,
   ChallengeDifficulty,
 } from '../../../shared/types/challenge';
+import ChallengeSolved from './ChallengeSolved';
 
 type ChallengeCardProps = {
   challenge: Challenge;
@@ -80,11 +81,16 @@ export default function ChallengeCard({
     }
   }, [result]);
 
+  if (solved) {
+    return (
+      <Card className="bg-gray-800 border-gray-700 flex items-center justify-center min-h-[400px]">
+        <ChallengeSolved points={challenge.score} title={challenge.title} />
+      </Card>
+    );
+  }
+
   return (
     <Card className="bg-gray-800 border-gray-700 overflow-hidden relative flex flex-col justify-between min-h-[400px] w-full">
-      {solved && (
-        <div className="absolute -right-8 -top-8 w-16 h-16 bg-green-500 rotate-45" />
-      )}
 
       <CardHeader>
         <div className="flex justify-between items-start">
