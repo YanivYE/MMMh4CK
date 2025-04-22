@@ -45,6 +45,7 @@ const seedChallenges = async () => {
       score: 200,
       category: 'reverse',
       difficulty: 'medium',
+      file_url: 'https://example.com/binaries/reverse101.zip',
     },
     {
       title: 'XSS Attack',
@@ -53,6 +54,7 @@ const seedChallenges = async () => {
       score: 150,
       category: 'web',
       difficulty: 'medium',
+      hint: 'Try injecting into the comment form!',
     },
     {
       title: 'Buffer Overflow',
@@ -61,8 +63,45 @@ const seedChallenges = async () => {
       score: 300,
       category: 'pwn',
       difficulty: 'hard',
+      server_details: 'nc bof.mmmh4ck.il 31337',
+    },
+    {
+      title: 'Crypto Puzzle',
+      description: 'Break the Caesar cipher to find the flag.',
+      flag: 'FLAG{CAESAR_CRACKED}',
+      score: 120,
+      category: 'crypto',
+      difficulty: 'easy',
+      hint: 'It’s just a simple rotation...',
+    },
+    {
+      title: 'Steganography Secrets',
+      description: 'Extract the hidden message from the image.',
+      flag: 'FLAG{HIDDEN_PIXELS}',
+      score: 180,
+      category: 'forensics',
+      difficulty: 'medium',
+      file_url: 'https://example.com/files/image.jpg',
+    },
+    {
+      title: 'Heap Exploitation Fun',
+      description: 'Perform heap spraying and get the flag.',
+      flag: 'FLAG{HEAP_CONTROLLED}',
+      score: 250,
+      category: 'pwn',
+      difficulty: 'hard',
+      server_details: 'nc heap.mmmh4ck.il 4000',
+    },
+    {
+      title: 'Miscellaneous Madness',
+      description: 'Use everything you know to break this one.',
+      flag: 'FLAG{RANDOM_STUFF}',
+      score: 175,
+      category: 'misc',
+      difficulty: 'medium',
     },
   ];
+  
 
   await Challenge.insertMany(sampleChallenges);
   console.log('Sample challenges added to the database.');

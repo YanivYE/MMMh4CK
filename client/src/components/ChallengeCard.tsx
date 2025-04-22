@@ -108,40 +108,44 @@ export default function ChallengeCard({
       </CardHeader>
 
       <CardContent>
-        {challenge.file_url && (
-          <a
-            href={challenge.file_url}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            Download Challenge File
-          </a>
-        )}
-
-        {challenge.server_details && (
-          <div className="p-3 bg-gray-900 rounded-md border border-gray-700">
-            <div className="flex items-center gap-2 text-gray-400 mb-1">
-              <Terminal className="w-4 h-4" />
-              <span>Connection Details:</span>
+        {/* Fixed middle details section */}
+        <div className="min-h-[90px] w-full flex items-center justify-center">
+          {challenge.file_url ? (
+            <a
+              href={challenge.file_url}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              <span className="underline">Download Challenge File</span>
+            </a>
+          ) : challenge.server_details ? (
+            <div className="p-3 bg-gray-900 rounded-md border border-gray-700 w-full">
+              <div className="flex items-center gap-2 text-gray-400 mb-1">
+                <Terminal className="w-4 h-4" />
+                <span>Connection Details:</span>
+              </div>
+              <code className="text-green-500 text-sm font-mono block">
+                {challenge.server_details}
+              </code>
             </div>
-            <code className="text-green-500 text-sm font-mono block">
-              {challenge.server_details}
-            </code>
-          </div>
-        )}
+          ) : (
+            <div className="text-gray-500 text-sm">No challenge file or server info</div>
+          )}
+        </div>
 
+        {/* Hint always shown consistently below */}
         {challenge.hint && (
-          <div>
+          <div className="w-full pt-3">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowHint(!showHint)}
               className="text-gray-400 hover:text-white"
             >
-              {showHint ? 'Hide Hint' : 'Show Hint'}
+              {showHint ? "Hide Hint" : "Show Hint"}
             </Button>
             {showHint && (
               <p className="mt-2 text-sm text-gray-500 italic">{challenge.hint}</p>
@@ -149,6 +153,7 @@ export default function ChallengeCard({
           </div>
         )}
       </CardContent>
+
 
       <CardFooter className="flex flex-col gap-3 pt-3 border-t border-gray-700">
         <div className="flex items-center gap-2 text-lg font-semibold text-yellow-500">
