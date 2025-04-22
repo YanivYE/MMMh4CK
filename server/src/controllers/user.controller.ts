@@ -29,3 +29,18 @@ export const logoutUser = async (req: Request, res: Response): Promise<void> => 
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const getTopUsers = async (req: Request, res: Response) => {
+  try {
+    const topUsers = await User.find()
+      .select("username score")
+      .sort({ score: -1 })
+      .limit(10);
+
+    res.json(topUsers);
+  } catch (err) {
+    console.error("Failed to fetch top users:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+

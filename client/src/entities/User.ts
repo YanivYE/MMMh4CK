@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export interface User {
     _id: string;      // or "id" depending on what Mongo returns
     username: string;
@@ -44,6 +46,14 @@ export const User = {
         console.error("Error logging out:", error);
         throw error;
       }
+    },
+
+    async listTop() {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("/api/user/leaderboard", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
     },
   };
   
