@@ -43,7 +43,7 @@ export default function Layout() {
             <div className="flex items-center">
               <Link to="/dashboard" className="flex items-center gap-2">
                 <Flag className="h-8 w-8 text-indigo-500" />
-                <span className="font-bold text-xl">MMMH4CK CTFs</span>
+                <span className="font-bold text-xl">MMMh4CK CTFs</span>
               </Link>
             </div>
 
