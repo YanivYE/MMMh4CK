@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "../services/user";
 import { fetchChallenges, submitFlag } from "../services/challenge";
 import ChallengeCard from "../components/ChallengeCard";
 import ChallengeFilters from "../components/ChallengeFilters"; 
 import { Challenge } from "../../../shared/types/challenge";
+import { useAuth } from "../context/AuthContext";
+import { User } from "../entities/User";
 
 export default function ChallengesPage() {
-  const [username, setUsername] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [category, setCategory] = useState<string>("all");
   const [search, setSearch] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { refreshUser } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
       if (!token) return navigate("/login");
       try {
-        const user = await getUser(token);
+        const user = await User.me();
         const data = await fetchChallenges(token);
-        setUsername(user.username);
         setScore(user.score ?? 0);
         setChallenges(data);
         setIsLoggedIn(true);
@@ -38,11 +38,12 @@ export default function ChallengesPage() {
     try {
       const result = await submitFlag(challengeId, flag);
   
-      // ✅ If the request succeeds, treat it as a correct flag
       setChallenges(prev =>
         prev.map(ch => (ch._id === challengeId ? { ...ch, completed: true } : ch))
       );
       setScore(result.newScore ?? score);
+
+      await refreshUser();
   
       return {
         success: true,

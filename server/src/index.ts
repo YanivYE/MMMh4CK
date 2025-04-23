@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);   
-app.use('/api/challenges', challengeRoutes);
+app.use('/api/challenge', challengeRoutes);
 
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {

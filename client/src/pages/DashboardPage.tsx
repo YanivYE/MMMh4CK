@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getUser } from "../services/user";
 import { useNavigate } from "react-router-dom";
+import { User } from "../entities/User";
 
 export default function DashboardPage() {
   const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ export default function DashboardPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
       try {
-        const user = await getUser(token);
+        const user = await User.me();
         setUsername(user.username);
         setScore(user.score ?? 0);
       } catch (err) {

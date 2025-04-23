@@ -6,12 +6,13 @@ import {
   CardTitle,
   CardContent,
 } from "../components/ui/Card";
-import { Trophy, Medal } from "lucide-react";
+import { Medal } from "lucide-react";
 
 type LeaderboardUser = {
   _id: string;
   username: string;
   score: number;
+  avatar?: string;
 };
 
 export default function LeaderboardPage() {
@@ -26,10 +27,9 @@ export default function LeaderboardPage() {
         console.error("Failed to load leaderboard:", err);
       }
     };
-  
+
     loadData();
   }, []);
-  
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
@@ -43,28 +43,32 @@ export default function LeaderboardPage() {
           <CardTitle className="text-xl text-white">Top Players</CardTitle>
         </CardHeader>
         <CardContent>
-        <div className="space-y-4">
-          {leaderboard.map((user) => (
-            <div
-              key={user._id}
-              className="flex items-center justify-between p-4 bg-gray-700 rounded-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-600 flex items-center justify-center rounded-full">
-                  <Trophy className="w-5 h-5 text-white" />
+          <div className="space-y-4">
+            {leaderboard.map((user) => (
+              <div
+                key={user._id}
+                className="flex items-center justify-between p-4 bg-gray-700 rounded-lg"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={
+                      user.avatar ||
+                      `https://api.dicebear.com/7.x/pixel-art/svg?seed=${user.username}`
+                    }
+                    alt={user.username}
+                    className="w-8 h-8 rounded-full border border-gray-600"
+                  />
+                  <p className="font-medium text-white">{user.username}</p>
                 </div>
-                <p className="font-medium text-white">{user.username}</p>
+                <div className="flex items-center gap-2">
+                  <Medal className="w-5 h-5 text-yellow-500" />
+                  <span className="font-bold text-white">
+                    {user.score ?? 0} points
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Medal className="w-5 h-5 text-yellow-500" />
-                <span className="font-bold text-white">
-                  {user.score ?? 0} points
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

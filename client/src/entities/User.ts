@@ -1,59 +1,55 @@
-import axios from "axios";
+import {
+  getUser,
+  logoutUser,
+  getTopUsers,
+  getUserById,
+  updateUserAvatar,
+  updateUserProfile,
+} from "../services/user";
 
 export interface User {
-    _id: string;      // or "id" depending on what Mongo returns
-    username: string;
-    score: number;
-  }  
+  _id: string;
+  username: string;
+  email: string;
+  score: number;
+  avatar?: string;
+}
 
 export const User = {
-    async me(): Promise<User> {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("/api/user/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
-        }
-  
-        return await response.json();
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        throw error;
-      }
-    },
-  
-    async logout(): Promise<void> {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("/api/user/logout", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error("Failed to log out");
-        }
-  
-        localStorage.removeItem("token");
-      } catch (error) {
-        console.error("Error logging out:", error);
-        throw error;
-      }
-    },
+  async me(): Promise<User> {
+    const token = localStorage.getItem("token");
+    return await getUser(token);
+  },
 
-    async listTop() {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("/api/user/leaderboard", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return res.data;
-    },
-  };
-  
+  async logout(): Promise<void> {
+    const token = localStorage.getItem("token");
+    await logoutUser(token);
+    localStorage.removeItem("token");
+  },
+
+  async listTop(): Promise<User[]> {
+    const token = localStorage.getItem("token");
+    return await getTopUsers(token);
+  },
+
+  async get(id: string): Promise<User> {
+    const token = localStorage.getItem("token");
+    return await getUserById(id, token);
+  },
+
+  async updateAvatar(avatar: string): Promise<User> {
+    const token = localStorage.getItem("token");
+    return await updateUserAvatar(avatar, token);
+  },
+
+  async updateProfile(data: {
+    username?: string;
+    email?: string;
+    currentPassword?: string;
+    newPassword?: string;
+  }): Promise<User> {
+    const token = localStorage.getItem("token");
+    const res = await updateUserProfile(data, token);
+    return res.user; // assuming backend returns { user }
+  },
+};

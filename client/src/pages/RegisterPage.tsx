@@ -1,27 +1,32 @@
 import { useState } from 'react';
-import { register } from '../services/auth';
+import { register, login as loginService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth(); 
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
     try {
-      await register(username, password);
-      alert('Registration successful! Please login.');
-      navigate('/login');
+      await register(username, email, password); 
+      const { token } = await loginService(username, password); 
+      login(token); 
+      navigate('/dashboard');
     } catch (err) {
       if (err instanceof AxiosError) {
         setError(err.response?.data?.message || 'Registration failed.');
@@ -49,6 +54,14 @@ export default function Register() {
             className="w-full bg-gray-900 text-white border border-gray-700 rounded px-4 py-2"
             value={username}
             onChange={e => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full bg-gray-900 text-white border border-gray-700 rounded px-4 py-2"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             required
           />
           <input
