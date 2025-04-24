@@ -167,7 +167,7 @@ export default function ProfilePage() {
           Change Password
         </button>
         <button onClick={() => setActiveSection("history")} className={`block w-full text-left px-4 py-2 rounded-md font-medium ${activeSection === "history" ? "bg-indigo-600 text-white" : "text-gray-300 hover:bg-gray-700"}`}>
-          Challenge History
+          Submission History
         </button>
       </aside>
 
@@ -288,7 +288,7 @@ export default function ProfilePage() {
 
         {activeSection === "history" && (
           <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-white mb-4">Challenge History</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">Submission History</h2>
             {history.length === 0 ? (
               <p className="text-sm text-gray-400">No submissions yet.</p>
             ) : (
