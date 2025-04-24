@@ -56,11 +56,29 @@ export default function ProfilePage() {
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
+  
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    const maxSizeMB = 1;
+  
+    // Type check
+    if (!allowedTypes.includes(file.type)) {
+      showMessage("error", "Only JPEG, JPG, PNG, or WEBP files are allowed.");
+      return;
+    }
+  
+    // Size check
+    const fileSizeMB = file.size / 1024 / 1024;
+    if (fileSizeMB > maxSizeMB) {
+      showMessage("error", "File is too large. Max 1MB.");
+      return;
+    }
+  
+    // Show preview and send to backend
     const reader = new FileReader();
     reader.onloadend = async () => {
       const base64 = reader.result as string;
       setPreview(base64);
+  
       try {
         await UserService.updateAvatar(base64);
         await fetchProfile();
@@ -68,10 +86,13 @@ export default function ProfilePage() {
         showMessage("success", "Avatar updated successfully.");
       } catch (err) {
         showMessage("error", "Failed to update avatar.");
+        console.error(err);
       }
     };
+  
     reader.readAsDataURL(file);
   };
+  
 
   const handleRemoveAvatar = async () => {
     try {
@@ -190,7 +211,13 @@ export default function ProfilePage() {
                     alt="avatar"
                     className="w-24 h-24 rounded-full border border-gray-600"
                   />
-                  <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleAvatarChange} />
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.webp"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleAvatarChange}
+                    />
                   <div className="absolute bottom-1 right-1">
                     <span className="text-xs bg-indigo-600 text-white px-2 py-0.5 rounded-full">Edit</span>
                   </div>
