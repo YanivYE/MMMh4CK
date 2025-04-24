@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { register, login as loginService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { useAuth } from '../context/AuthContext';
+import PasswordStrength from '../components/PasswordStrength';
+import { isPasswordStrong } from '../utils/validatePassword';
+import { parseErrorMessage } from '../utils/parseErrorMessage';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -17,6 +19,11 @@ export default function Register() {
     e.preventDefault();
     setError('');
 
+    if (!isPasswordStrong(password)) {
+      setError("New password is too weak.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -28,11 +35,7 @@ export default function Register() {
       login(token); 
       navigate('/dashboard');
     } catch (err) {
-      if (err instanceof AxiosError) {
-        setError(err.response?.data?.message || 'Registration failed.');
-      } else {
-        setError('Something went wrong.');
-      }
+      setError(parseErrorMessage(err));
     }
   };
 
@@ -72,6 +75,7 @@ export default function Register() {
             onChange={e => setPassword(e.target.value)}
             required
           />
+          <PasswordStrength password={password} />
           <input
             type="password"
             placeholder="Confirm Password"

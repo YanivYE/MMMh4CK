@@ -6,6 +6,9 @@ import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { categoryColors, ChallengeCategory } from "../../../shared/types/challenge";
+import PasswordStrength from "../components/PasswordStrength";
+import { isPasswordStrong } from "../utils/validatePassword";
+import { parseErrorMessage } from "../utils/parseErrorMessage";
 
 export default function ProfilePage() {
   const { refreshUser } = useAuth();
@@ -135,7 +138,7 @@ export default function ProfilePage() {
       await refreshUser();
       showMessage("success", "Account info updated successfully.");
     } catch (err: any) {
-      showMessage("error", err.response?.data?.message || "Failed to update profile.");
+        showMessage("error", parseErrorMessage(err));
     }
   };
   
@@ -146,6 +149,11 @@ export default function ProfilePage() {
       showMessage("error", "Please fill in all password fields.");
       return;
     }
+
+    if (!isPasswordStrong(formData.newPassword)) {
+        showMessage("error", "New password is too weak.");
+        return;
+      }
   
     if (newPassword !== confirmPassword) {
       showMessage("error", "New passwords do not match.");
@@ -167,7 +175,7 @@ export default function ProfilePage() {
       }));
       showMessage("success", "Password updated successfully.");
     } catch (err: any) {
-      showMessage("error", err.response?.data?.message || "Failed to update password.");
+      showMessage("error", parseErrorMessage(err));
     }
   };
   
@@ -284,17 +292,18 @@ export default function ProfilePage() {
                             className="w-full"
                         />
                         </div>
-                        <div>
-                        <label className="block text-sm text-gray-400 mb-1">New Password</label>
-                        <Input
-                            type="password"
-                            name="newPassword"
-                            value={formData.newPassword}
-                            onChange={handleInputChange}
-                            placeholder="New Password"
-                            className="w-full"
-                        />
-                        </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">New Password</label>
+                                <Input
+                                    type="password"
+                                    name="newPassword"
+                                    value={formData.newPassword}
+                                    onChange={handleInputChange}
+                                    placeholder="New Password"
+                                    className="w-full"
+                                />
+                                <PasswordStrength password={formData.newPassword} />
+                            </div>
                         <div>
                         <label className="block text-sm text-gray-400 mb-1">Confirm New Password</label>
                         <Input

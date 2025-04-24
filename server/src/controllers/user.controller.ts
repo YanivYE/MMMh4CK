@@ -47,18 +47,21 @@ export const getTopUsers = async (req: Request, res: Response) => {
 
 export const updateAvatar = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
+  const { avatar } = req.body;
 
-  if (!req.file) {
-    res.status(400).json({ message: "No file uploaded" });
+  // Accept empty string (for removal), or validate base64 image
+  const isValid =
+    avatar === "" || (typeof avatar === "string" && avatar.startsWith("data:image/"));
+
+  if (!isValid) {
+    res.status(400).json({ message: "Invalid avatar format." });
     return;
   }
 
   try {
-    const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
-
     const user = await User.findByIdAndUpdate(
       userId,
-      { avatar: base64 },
+      { avatar }, // avatar could be "" or a base64 image
       { new: true }
     ).select("avatar username email score");
 
@@ -68,6 +71,7 @@ export const updateAvatar = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 export const updateUserProfile = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;

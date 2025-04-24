@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { login as loginService } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { parseErrorMessage } from '../utils/parseErrorMessage';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -19,11 +19,7 @@ export default function Login() {
       login(token);
       navigate('/dashboard');
     } catch (err) {
-      if (err instanceof AxiosError) {
-        setError(err.response?.data?.message || 'Login failed.');
-      } else {
-        setError('Something went wrong.');
-      }
+      setError(parseErrorMessage(err));
     }
   };
 

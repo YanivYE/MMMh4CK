@@ -36,6 +36,5 @@ export const profileUpdateSchema = z.object({
 
 // Flag Submission Schema
 export const flagSubmitSchema = z.object({
-  challengeId: z.string().length(24, "Invalid challenge ID"), // assuming MongoDB ObjectId
   flag: flagSchema
 });

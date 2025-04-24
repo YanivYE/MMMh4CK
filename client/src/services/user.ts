@@ -33,7 +33,7 @@ export const getUserById = async (id: string, token: string | null) => {
 export const updateUserAvatar = async (avatar: string, token: string | null) => {
   const res = await axios.put(
     `${API_URL}/avatar`,
-    { avatar },
+    { avatar: avatar },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return res.data;

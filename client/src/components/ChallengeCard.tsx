@@ -23,6 +23,7 @@ import {
   categoryColors
 } from '../../../shared/types/challenge';
 import ChallengeSolved from './ChallengeSolved';
+import { isValidFlag } from '../utils/validateFlag';
 
 type ChallengeCardProps = {
   challenge: Challenge;
@@ -50,6 +51,15 @@ export default function ChallengeCard({
 
   const handleSubmit = async () => {
     if (!flag) return;
+    
+    if (!isValidFlag(flag)) {
+      setResult({
+        success: false,
+        message: "Invalid flag format."
+      });
+      return;
+    }
+
     const submissionResult = await onSubmit(challenge._id, flag);
     setResult(submissionResult);
 
@@ -165,7 +175,7 @@ export default function ChallengeCard({
               <Input
                 value={flag}
                 onChange={(e) => setFlag(e.target.value)}
-                placeholder="Enter flag"
+                placeholder="MMMh4CK{...}"
                 className="flex-1 bg-gray-700 border-gray-600 text-white"
               />
               <Button
@@ -175,7 +185,6 @@ export default function ChallengeCard({
                 Submit
               </Button>
             </div>
-
 
             {/* ✅ Inline result message */}
             {result && (

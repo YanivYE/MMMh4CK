@@ -6,6 +6,7 @@ import ChallengeFilters from "../components/ChallengeFilters";
 import { Challenge } from "../../../shared/types/challenge";
 import { useAuth } from "../context/AuthContext";
 import { User } from "../entities/User";
+import { parseErrorMessage } from "../utils/parseErrorMessage";
 
 export default function ChallengesPage() {
   const [score, setScore] = useState<number>(0);
@@ -51,17 +52,9 @@ export default function ChallengesPage() {
       };
   
     } catch (err: any) {
-      // ❌ Handle incorrect flags (400) and other errors
-      if (err.response && err.response.status === 400) {
-        return {
-          success: false,
-          message: err.response.data?.message || "❌ Incorrect flag. Try again.",
-        };
-      }
-  
       return {
         success: false,
-        message: "❌ An unexpected error occurred. Please try again later.",
+        message: parseErrorMessage(err) || "❌ Incorrect flag. Try again.",
       };
     }
   };
