@@ -47,16 +47,22 @@ export const getTopUsers = async (req: Request, res: Response) => {
 
 export const updateAvatar = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
-  const { avatar } = req.body;
+
+  if (!req.file) {
+    res.status(400).json({ message: "No file uploaded" });
+    return;
+  }
 
   try {
+    const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { avatar: avatar || ""},
+      { avatar: base64 },
       { new: true }
     ).select("avatar username email score");
 
-    res.json(user);
+    res.json({ user });
   } catch (err) {
     console.error("Failed to update avatar:", err);
     res.status(500).json({ message: "Server error" });
