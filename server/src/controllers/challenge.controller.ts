@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { User } from '../models/user.model';
 import { Challenge } from '../models/challenge.model';
+import { Submission } from '../models/submission.model';
 
 export const getChallenges: RequestHandler = async (req, res) => {
   const userId = (req as any).user?.id; 
@@ -23,7 +24,6 @@ export const getChallenges: RequestHandler = async (req, res) => {
   res.json(data);
 };
 
-
 export const submitFlag: RequestHandler = async (req, res) => {
     const userId = (req as any).user?.id;
     const { flag } = req.body;
@@ -42,8 +42,18 @@ export const submitFlag: RequestHandler = async (req, res) => {
       res.status(400).json({ message: 'Challenge already completed' });
       return;
     }
+
+    const isCorrect = challenge.flag === flag;
+
+    await Submission.create({
+      challenge_id: challengeId,
+      created_by: userId,
+      flag_submitted: flag,
+      is_correct: isCorrect,
+      created_at: new Date()
+    });
   
-    if (flag === challenge.flag) {
+    if (isCorrect) {
       // Update user's score and completedChallenges
       user.score += challenge.score;
       user.completedChallenges = [...(user.completedChallenges || []), challenge._id as any];

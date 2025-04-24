@@ -5,6 +5,7 @@ import { connectDB } from './config/db';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import challengeRoutes from './routes/challenge.routes';
+import submissionRoutes from './routes/submission.routes'; 
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);   
 app.use('/api/challenge', challengeRoutes);
+app.use('/api/submission', submissionRoutes); 
 
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {

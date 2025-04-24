@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardHeader,
@@ -19,8 +19,8 @@ import {
 } from 'lucide-react';
 import {
   Challenge,
-  ChallengeCategory,
-  ChallengeDifficulty,
+  difficultyColors,
+  categoryColors
 } from '../../../shared/types/challenge';
 import ChallengeSolved from './ChallengeSolved';
 
@@ -33,21 +33,6 @@ type ChallengeCardProps = {
   }>;
   isLoggedIn: boolean;
   onOpen?: () => void;
-};
-
-const difficultyColors: Record<ChallengeDifficulty, string> = {
-  easy: 'bg-green-500/10 text-green-500',
-  medium: 'bg-yellow-500/10 text-yellow-500',
-  hard: 'bg-red-500/10 text-red-500',
-};
-
-const categoryColors: Record<ChallengeCategory, string> = {
-  web: 'bg-blue-500/10 text-blue-500',
-  crypto: 'bg-purple-500/10 text-purple-500',
-  forensics: 'bg-green-500/10 text-green-500',
-  reverse: 'bg-yellow-500/10 text-yellow-500',
-  pwn: 'bg-red-500/10 text-red-500',
-  misc: 'bg-gray-500/10 text-gray-400',
 };
 
 export default function ChallengeCard({
