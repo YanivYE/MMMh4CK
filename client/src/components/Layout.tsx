@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Flag, Trophy, Home, LogOut } from "lucide-react";
+import { Flag, Trophy, LogOut, LayoutGrid } from "lucide-react";
 import { Button } from "./ui/Button";
 import { useAuth } from "../context/AuthContext";
 
@@ -48,9 +48,15 @@ export default function Layout() {
             </div>
 
             <div className="flex items-center gap-4">
+              <Link to="/dashboard">
+                <Button variant="ghost" className="text-gray-300 hover:text-white">
+                  <LayoutGrid className="h-5 w-5 mr-2" />
+                  Dashboard
+                </Button>
+              </Link>
               <Link to="/challenges">
                 <Button variant="ghost" className="text-gray-300 hover:text-white">
-                  <Home className="h-5 w-5 mr-2" />
+                  <Flag className="h-5 w-5 mr-2" />
                   Challenges
                 </Button>
               </Link>
