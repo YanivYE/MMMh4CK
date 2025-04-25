@@ -4,7 +4,6 @@ import {
   getTopUsers,
   updateUserAvatar,
   updateUserProfile,
-  getCorrectSubmissions,
 } from "../services/user";
 
 export interface User {
@@ -30,11 +29,6 @@ export const User = {
   async listTop(): Promise<User[]> {
     const token = localStorage.getItem("token");
     return await getTopUsers(token);
-  },
-
-  async getStats(): Promise<{ correctSubmissions: number }> {
-    const token = localStorage.getItem("token");
-    return await getCorrectSubmissions(token);
   },
 
   async updateAvatar(avatar: string): Promise<User> {

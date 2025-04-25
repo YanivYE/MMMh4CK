@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../entities/User";
 import { Trophy, CheckCircle, Flame } from "lucide-react";
+import { Submission } from "../entities/Submission";
 
 export default function ScoreCard() {
   const [profile, setProfile] = useState<any>(null);
@@ -11,7 +12,7 @@ export default function ScoreCard() {
     const fetchData = async () => {
       try {
         const userData = await User.me();
-        const stats = await User.getStats();
+        const stats = await Submission.getStats();
         const leaderboard = await User.listTop();
 
         setProfile(userData);

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/user.model';
-import { Submission } from '../models/submission.model';
 
 export const getUserDetails = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -44,16 +43,6 @@ export const getTopUsers = async (req: Request, res: Response) => {
     console.error("Failed to fetch top users:", err);
     res.status(500).json({ message: "Server error" });
   }
-};
-
-export const getUserStats = async (req: Request, res: Response) => {
-  const userId = (req as any).user.id;
-  const correctCount = await Submission.countDocuments({
-    created_by: userId,
-    is_correct: true,
-  });
-
-  res.json({ correctSubmissions: correctCount });
 };
 
 export const updateAvatar = async (req: Request, res: Response) => {

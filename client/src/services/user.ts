@@ -23,13 +23,6 @@ export const getTopUsers = async (token: string | null) => {
   return res.data;
 };
 
-export const getCorrectSubmissions = async (token: string | null) => {
-  const res = await axiosInstance.get(`${API_URL}/stats`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
-};
-
 export const updateUserAvatar = async (avatar: string, token: string | null) => {
   const res = await axiosInstance.put(
     `${API_URL}/avatar`,

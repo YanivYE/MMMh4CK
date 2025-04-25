@@ -1,4 +1,5 @@
-import { getUserSubmissions } from "../services/submission";
+import { ChallengeCategory } from "../../../shared/types/challenge";
+import { getCorrectSubmissions, getUserSubmissions } from "../services/submission";
 
 export interface Submission {
   _id: string;
@@ -13,9 +14,19 @@ export interface Submission {
   created_at: Date; 
 }
 
+export type UserStats = {
+    correctSubmissions: number;
+    categoryCounts: Record<ChallengeCategory, number>;
+  };
+
 export const Submission = {
   async listByCurrentUser(): Promise<Submission[]> {
     const token = localStorage.getItem("token");
     return await getUserSubmissions(token);
-  }
+  },
+
+  async getStats(): Promise<UserStats> {
+    const token = localStorage.getItem("token");
+    return await getCorrectSubmissions(token);
+},
 };

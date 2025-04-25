@@ -8,3 +8,10 @@ export const getUserSubmissions = async (token: string | null) => {
   });
   return res.data;
 };
+
+export const getCorrectSubmissions = async (token: string | null) => {
+    const res = await axios.get(`${API_URL}/stats`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+};
