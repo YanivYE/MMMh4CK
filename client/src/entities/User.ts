@@ -2,9 +2,9 @@ import {
   getUser,
   logoutUser,
   getTopUsers,
-  getUserById,
   updateUserAvatar,
   updateUserProfile,
+  getCorrectSubmissions,
 } from "../services/user";
 
 export interface User {
@@ -32,9 +32,9 @@ export const User = {
     return await getTopUsers(token);
   },
 
-  async get(id: string): Promise<User> {
+  async getStats(): Promise<{ correctSubmissions: number }> {
     const token = localStorage.getItem("token");
-    return await getUserById(id, token);
+    return await getCorrectSubmissions(token);
   },
 
   async updateAvatar(avatar: string): Promise<User> {
@@ -50,6 +50,6 @@ export const User = {
   }): Promise<User> {
     const token = localStorage.getItem("token");
     const res = await updateUserProfile(data, token);
-    return res.user; // assuming backend returns { user }
+    return res.user;
   },
 };

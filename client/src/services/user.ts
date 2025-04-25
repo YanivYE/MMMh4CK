@@ -1,39 +1,39 @@
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 const API_URL = "http://localhost:3000/api/user";
 
 export const getUser = async (token: string | null) => {
-  const res = await axios.get(`${API_URL}/me`, {
+  const res = await axiosInstance.get(`${API_URL}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
 };
 
 export const logoutUser = async (token: string | null) => {
-  const res = await axios.post(`${API_URL}/logout`, null, {
+  const res = await axiosInstance.post(`${API_URL}/logout`, null, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
 };
 
 export const getTopUsers = async (token: string | null) => {
-  const res = await axios.get(`${API_URL}/leaderboard`, {
+  const res = await axiosInstance.get(`${API_URL}/leaderboard`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
 };
 
-export const getUserById = async (id: string, token: string | null) => {
-  const res = await axios.get(`${API_URL}/${id}`, {
+export const getCorrectSubmissions = async (token: string | null) => {
+  const res = await axiosInstance.get(`${API_URL}/stats`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
 };
 
 export const updateUserAvatar = async (avatar: string, token: string | null) => {
-  const res = await axios.put(
+  const res = await axiosInstance.put(
     `${API_URL}/avatar`,
-    { avatar: avatar },
+    { avatar },
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return res.data;
@@ -48,7 +48,7 @@ export const updateUserProfile = async (
   },
   token: string | null
 ) => {
-  const res = await axios.put(`${API_URL}/update`, data, {
+  const res = await axiosInstance.put(`${API_URL}/update`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data;
