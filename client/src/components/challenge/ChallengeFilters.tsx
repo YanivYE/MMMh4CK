@@ -1,7 +1,7 @@
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from "./ui/Tabs";
+import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs";
 import { Search } from "lucide-react";
-import { Input } from "./ui/Input";
+import { Input } from "../ui/Input";
 
 type ChallengeFiltersProps = {
   activeCategory: string;

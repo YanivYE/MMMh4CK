@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchChallenges, submitFlag } from "../services/challenge";
-import ChallengeCard from "../components/ChallengeCard";
-import ChallengeFilters from "../components/ChallengeFilters"; 
+import ChallengeCard from "../components/challenge/ChallengeCard";
+import ChallengeFilters from "../components/challenge/ChallengeFilters"; 
 import { Challenge } from "../../../shared/types/challenge";
 import { useAuth } from "../context/AuthContext";
 import { User } from "../entities/User";

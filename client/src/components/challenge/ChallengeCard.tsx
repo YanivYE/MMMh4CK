@@ -5,10 +5,10 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
-} from './ui/Card';
-import { Input } from './ui/Input';
-import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
+} from '../ui/Card';
+import { Input } from '../ui/Input';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
 import {
   LockIcon,
   Flag,
@@ -21,9 +21,9 @@ import {
   Challenge,
   difficultyColors,
   categoryColors
-} from '../../../shared/types/challenge';
+} from '../../../../shared/types/challenge';
 import ChallengeSolved from './ChallengeSolved';
-import { isValidFlag } from '../utils/validateFlag';
+import { isValidFlag } from '../../utils/validateFlag';
 
 type ChallengeCardProps = {
   challenge: Challenge;
