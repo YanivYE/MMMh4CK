@@ -5,6 +5,7 @@ export enum ChallengeCategory {
     Reverse = "reverse",
     Pwn = "pwn",
     Misc = "misc",
+    Osint = "osint", 
 }
 
 export enum ChallengeDifficulty {
@@ -20,15 +21,17 @@ enum Colors {
     Blue = "bg-blue-500/10 text-blue-500",
     Purple = "bg-purple-500/10 text-purple-500",
     Gray = "bg-gray-500/10 text-gray-400",
+    Pink = "bg-pink-500/10 text-pink-500", 
 }
 
 export enum HexColors {
-    Green = "#22c55e", // Tailwind text-green-500
-    Yellow = "#eab308", // Tailwind text-yellow-500
-    Red = "#ef4444", // Tailwind text-red-500
-    Blue = "#3b82f6", // Tailwind text-blue-500
-    Purple = "#8b5cf6", // Tailwind text-purple-500
-    Gray = "#9ca3af", // Tailwind text-gray-400
+    Green = "#22c55e",    // Tailwind text-green-500
+    Yellow = "#eab308",   // Tailwind text-yellow-500
+    Red = "#ef4444",      // Tailwind text-red-500
+    Blue = "#3b82f6",     // Tailwind text-blue-500
+    Purple = "#8b5cf6",   // Tailwind text-purple-500
+    Gray = "#9ca3af",     // Tailwind text-gray-400
+    Pink = "#ec4899",     // Tailwind text-pink-500 
 }
 
 export const difficultyColors: Record<ChallengeDifficulty, string> = {
@@ -44,6 +47,7 @@ export const categoryColors: Record<ChallengeCategory, string> = {
     [ChallengeCategory.Reverse]: Colors.Yellow,
     [ChallengeCategory.Pwn]: Colors.Red,
     [ChallengeCategory.Misc]: Colors.Gray,
+    [ChallengeCategory.Osint]: Colors.Pink, 
 };
 
 export const categoryHexColors: Record<ChallengeCategory, string> = {
@@ -53,6 +57,7 @@ export const categoryHexColors: Record<ChallengeCategory, string> = {
     [ChallengeCategory.Reverse]: HexColors.Yellow,
     [ChallengeCategory.Pwn]: HexColors.Red,
     [ChallengeCategory.Misc]: HexColors.Gray,
+    [ChallengeCategory.Osint]: HexColors.Pink, 
 };
 
 export interface ChallengeBase {

@@ -3,50 +3,34 @@ import { Pie } from "react-chartjs-2";
 import { Submission } from "../../entities/Submission";
 import {
   ChallengeCategory,
-  categoryColors
+  categoryHexColors,
 } from "../../../../shared/types/challenge";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
-  Legend
+  Legend,
 } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// Mapping Tailwind classes -> HEX colors
-const tailwindColorToHex: Record<string, string> = {
-  "green-500": "#22c55e",
-  "yellow-500": "#eab308",
-  "red-500": "#ef4444",
-  "blue-500": "#3b82f6",
-  "purple-500": "#8b5cf6",
-  "gray-400": "#9ca3af"
-};
-
 const chartOptions = {
-    plugins: {
-      legend: {
-        position: "right" as const, // or 'left' / 'top' if you prefer
-        labels: {
-          usePointStyle: true,     // ✔ shows circle bullets like your screenshot
-          pointStyle: "circle",
-          color: "#d1d5db",        // Tailwind gray-300
-          padding: 12,
-          font: {
-            size: 14,
-            weight: 500
-          }
-        }
-      }
-    }
-  };
-  
-
-function mapTailwindClassToHex(tailwindClass: string): string {
-  const color = tailwindClass.split(" ")[1]?.replace("text-", "") || "";
-  return tailwindColorToHex[color] || "#888"; // fallback gray
-}
+  plugins: {
+    legend: {
+      position: "right" as const,
+      labels: {
+        usePointStyle: true,
+        pointStyle: "circle",
+        color: "#d1d5db", // Tailwind gray-300
+        padding: 12,
+        font: {
+          size: 14,
+          weight: 500,
+        },
+      },
+    },
+  },
+};
 
 export default function CategoryPieChart() {
   const [categoryCounts, setCategoryCounts] = useState<Record<ChallengeCategory, number>>({
@@ -55,7 +39,8 @@ export default function CategoryPieChart() {
     forensics: 0,
     reverse: 0,
     pwn: 0,
-    misc: 0
+    misc: 0,
+    osint: 0,
   });
 
   useEffect(() => {
@@ -80,13 +65,11 @@ export default function CategoryPieChart() {
     datasets: [
       {
         data: solvedCategories.map((cat) => categoryCounts[cat]),
-        backgroundColor: solvedCategories.map((cat) =>
-          mapTailwindClassToHex(categoryColors[cat])
-        ),
-        borderColor: "#1f2937",
-        borderWidth: 2
-      }
-    ]
+        backgroundColor: solvedCategories.map((cat) => categoryHexColors[cat]),
+        borderColor: "#1f2937", // slate-800
+        borderWidth: 2,
+      },
+    ],
   };
 
   return (
@@ -94,7 +77,7 @@ export default function CategoryPieChart() {
       <h2 className="text-lg font-semibold mb-4">Category Completion</h2>
       {solvedCategories.length > 0 ? (
         <div className="max-w-xs mx-auto">
-          <Pie data={chartData} options={chartOptions}/>
+          <Pie data={chartData} options={chartOptions} />
         </div>
       ) : (
         <p className="text-sm text-gray-400">No solved challenges yet.</p>

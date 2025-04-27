@@ -16,7 +16,9 @@ module.exports = {
     "bg-purple-500/10",
     "text-purple-500",
     "bg-gray-500/10",
-    "text-gray-400",
+    "text-gray-500",
+    "bg-pink-500/10",
+    "text-pink-500",
   ],
   theme: {
     extend: {},

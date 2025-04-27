@@ -27,7 +27,8 @@ export const getSubmissionStats = async (req: Request, res: Response) => {
     forensics: 0,
     reverse: 0,
     pwn: 0,
-    misc: 0
+    misc: 0,
+    osint: 0
   };
 
   correctSubs.forEach((sub: any) => {
