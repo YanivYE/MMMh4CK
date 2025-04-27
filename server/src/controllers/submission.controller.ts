@@ -19,7 +19,7 @@ export const getSubmissionStats = async (req: Request, res: Response) => {
   const correctSubs = await Submission.find({
     created_by: userId,
     is_correct: true
-  }).populate("challenge_id", "category"); // Only fetch category
+  }).populate("challenge_id", "category score"); // Only fetch category
 
   const categoryCounts: Record<ChallengeCategory, number> = {
     web: 0,
@@ -37,9 +37,17 @@ export const getSubmissionStats = async (req: Request, res: Response) => {
     }
   });
 
+  const pointsOverTime = correctSubs.map((sub: any) => ({
+    timestamp: sub.created_at, // when the user solved the challenge
+    points: sub.challenge_id?.score || 0 // challenge points
+  }));
+
+  pointsOverTime.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
   res.json({
     correctSubmissions: correctSubs.length,
-    categoryCounts
+    categoryCounts,
+    pointsOverTime
   });
 };
   

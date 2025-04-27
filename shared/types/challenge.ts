@@ -20,7 +20,7 @@ export enum ChallengeDifficulty {
     Blue = "bg-blue-500/10 text-blue-500",
     Purple = "bg-purple-500/10 text-purple-500",
     Gray = "bg-gray-500/10 text-gray-400"
-  }
+}
   
   export const difficultyColors: Record<ChallengeDifficulty, string> = {
     [ChallengeDifficulty.Easy]: Colors.Green,

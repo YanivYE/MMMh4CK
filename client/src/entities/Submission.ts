@@ -17,7 +17,11 @@ export interface Submission {
 export type UserStats = {
     correctSubmissions: number;
     categoryCounts: Record<ChallengeCategory, number>;
-  };
+    pointsOverTime: Array<{
+      timestamp: Date;
+      points: number;
+    }>;
+};
 
 export const Submission = {
   async listByCurrentUser(): Promise<Submission[]> {

@@ -11,7 +11,7 @@ export default function SubmissionHistory({ history, limit }: SubmissionHistoryP
 
   return (
     <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-white mb-4">Submission History</h2>
+      <h2 className="text-xl font-semibold text-white mb-4">{limit ? "Recent Submissions" : "Submission History"}</h2>
       {limited.length === 0 ? (
         <p className="text-sm text-gray-400">No submissions yet.</p>
       ) : (
