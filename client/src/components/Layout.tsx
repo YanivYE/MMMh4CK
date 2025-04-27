@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
-import { Flag, Trophy, LogOut, LayoutGrid } from "lucide-react";
+import { Flag, Trophy, LogOut, LayoutGrid, Earth } from "lucide-react";
 import { Button } from "./ui/Button";
 import { useAuth } from "../context/AuthContext";
 
@@ -58,6 +58,12 @@ export default function Layout() {
                 <Button variant="ghost" className="text-gray-300 hover:text-white">
                   <Flag className="h-5 w-5 mr-2" />
                   Challenges
+                </Button>
+              </Link>
+              <Link to="/map">
+                <Button variant="ghost" className="text-gray-300 hover:text-white">
+                  <Earth className="h-5 w-5 mr-2" />
+                  World Map
                 </Button>
               </Link>
               <Link to="/leaderboard">

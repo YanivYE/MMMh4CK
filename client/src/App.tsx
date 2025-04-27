@@ -8,6 +8,7 @@ import ChallengesPage from "./pages/ChallengesPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
+import WorldMapPage from "./pages/WorldMapPage";
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -22,6 +23,7 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/challenges" element={<ChallengesPage />} />
+        <Route path="/map" element={<WorldMapPage />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Route>
