@@ -27,6 +27,7 @@ export default function ChallengeFilters({
           <TabsTrigger value="reverse">Reverse</TabsTrigger>
           <TabsTrigger value="pwn">Pwn</TabsTrigger>
           <TabsTrigger value="misc">Misc</TabsTrigger>
+          <TabsTrigger value="osint">Osint</TabsTrigger>
         </TabsList>
       </Tabs>
 
