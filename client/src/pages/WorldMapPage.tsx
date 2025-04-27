@@ -52,7 +52,7 @@ export default function WorldMapPage() {
 
       return {
         success: true,
-        message: result.message || "🎉 Correct! You solved the challange",
+        message: result.message || "🎉 Correct! You solved the challenge",
       };
     } catch (err: any) {
       return {
@@ -67,13 +67,13 @@ export default function WorldMapPage() {
       countryName.toLowerCase().includes(c.title.trim().toLowerCase())
     );
   };
-  
-  return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-start px-4 py-8 relative">
-      <h1 className="text-3xl font-bold text-white mb-6">World Map</h1>
 
+  return (
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-start p-0 m-0">
+      {/* Removed the World Map Title */}
+      
       {selectedChallenge && (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center p-4">
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center p-4 z-50">
           <div className="bg-slate-800 rounded-lg p-6 w-full max-w-lg">
             <ChallengeCard
               challenge={selectedChallenge}
@@ -94,54 +94,55 @@ export default function WorldMapPage() {
       {loading ? (
         <div className="text-gray-400 text-center py-20">Loading challenges...</div>
       ) : (
-        <div className="bg-slate-800 rounded-2xl shadow-md p-6 w-full max-w-7xl">
+        <div className="w-full">
           <ComposableMap
             projection="geoMercator"
-            projectionConfig={{
-              scale: 145,   // bigger zoom
-            }}
-            width={1100}
-            height={700}
+            projectionConfig={{ scale: 100 }}
+            width={700}
+            height={650}
             style={{ width: "100%", height: "auto" }}
           >
             <Geographies geography={geoData} key={challenges.length}>
               {({ geographies }) =>
-                geographies.map((geo) => {
-                  const countryName = geo.properties?.name || "Unknown";
-                  const challenge = findChallengeByCountry(countryName);
+                geographies
+                  .filter((geo) => geo.properties?.name !== "Antarctica") // ✅ Remove Antarctica
+                  .map((geo) => {
+                    const countryName = geo.properties?.name || "Unknown";
+                    const challenge = findChallengeByCountry(countryName);
 
-                  let fillColor = "#334155"; // Default color
+                    let fillColor = "#334155"; // Default color
 
-                  if (challenge) {
-                    fillColor = challenge.completed
-                      ? solvedColor
-                      : categoryHexColors[challenge.category] || "#f87171"; // fallback red
-                  }
+                    if (challenge) {
+                      fillColor = challenge.completed
+                        ? solvedColor
+                        : categoryHexColors[challenge.category] || "#f87171"; // fallback red
+                    }
 
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onClick={() => challenge && setSelectedChallenge(challenge)}
-                      style={{
-                        default: {
-                          fill: fillColor,
-                          outline: "none",
-                          transition: "all 0.3s ease-in-out",
-                        },
-                        hover: {
-                          fill: fillColor,
-                          outline: "none",
-                          cursor: challenge ? "pointer" : "default",
-                        },
-                        pressed: {
-                          fill: "#0ea5e9",
-                          outline: "none",
-                        },
-                      }}
-                    />
-                  );
-                })
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onClick={() => challenge && setSelectedChallenge(challenge)}
+                        style={{
+                          default: {
+                            fill: fillColor,
+                            outline: "none",
+                            transition: "all 0.3s ease-in-out",
+                          },
+                          hover: {
+                            fill: fillColor,
+                            outline: "none",
+                            cursor: challenge ? "pointer" : "default",
+                            filter: "brightness(1.2)", 
+                          },
+                          pressed: {
+                            fill: "#0ea5e9",
+                            outline: "none",
+                          },
+                        }}
+                      />
+                    );
+                  })
               }
             </Geographies>
           </ComposableMap>
