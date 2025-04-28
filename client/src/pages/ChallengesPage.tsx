@@ -48,7 +48,7 @@ export default function ChallengesPage() {
   
       return {
         success: true,
-        message: `🎉 Correct! You solved "${result.title}"`,
+        message: `Correct! You solved "${result.title}"`,
       };
   
     } catch (err: any) {
@@ -69,7 +69,6 @@ export default function ChallengesPage() {
       <h1 className="text-3xl font-bold text-white mb-2">Capture The Flag</h1>
       <p className="text-gray-400 mb-6">Solve challenges, find flags, climb the leaderboard!</p>
   
-      {/* ✅ Filters at the top */}
       <ChallengeFilters
         activeCategory={category}
         setActiveCategory={setCategory}
@@ -77,7 +76,6 @@ export default function ChallengesPage() {
         setSearchQuery={setSearch}
       />
   
-      {/* ✅ Conditional message if no matches */}
       {filtered.length === 0 ? (
         <div className="text-gray-400 text-center py-8">
           No challenges found.

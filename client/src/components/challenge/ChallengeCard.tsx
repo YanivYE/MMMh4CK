@@ -68,7 +68,7 @@ export default function ChallengeCard({
     }
   };
 
-  // ✅ Auto-dismiss result after 5 seconds
+  // Auto-dismiss result after 5 seconds
   useEffect(() => {
     if (result) {
       const timeout = setTimeout(() => setResult(null), 5000);
@@ -131,7 +131,6 @@ export default function ChallengeCard({
           )}
         </div>
 
-        {/* Hint always shown consistently below */}
         {challenge.hint && (
           <div className="w-full pt-3">
             <Button
@@ -186,7 +185,7 @@ export default function ChallengeCard({
               </Button>
             </div>
 
-            {/* ✅ Inline result message */}
+            {/* Inline result message */}
             {result && (
               <div
                 className={`mt-2 p-3 rounded text-sm font-medium border transition-all duration-300 

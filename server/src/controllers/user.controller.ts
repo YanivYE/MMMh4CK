@@ -24,7 +24,6 @@ export const getUserDetails = async (req: Request, res: Response): Promise<void>
 
 export const logoutUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    // With token-based auth, just "invalidate" on client (no need to clear server session)
     res.status(200).json({ message: 'Logged out' });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -49,7 +48,6 @@ export const updateAvatar = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
   const { avatar } = req.body;
 
-  // Accept empty string (for removal), or validate base64 image
   const isValid =
     avatar === "" || (typeof avatar === "string" && avatar.startsWith("data:image/"));
 

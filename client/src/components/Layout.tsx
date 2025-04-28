@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation, Outlet } from "react-router-dom";
 import { Flag, Trophy, LogOut, LayoutGrid, Earth } from "lucide-react";
 import { Button } from "./ui/Button";
 import { useAuth } from "../context/AuthContext";
+import Logo from "../assets/logo.png";
 
 export default function Layout() {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -24,7 +25,7 @@ export default function Layout() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      logout();
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -41,10 +42,10 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link to="/dashboard" className="flex items-center gap-2">
-                <Flag className="h-8 w-8 text-indigo-500" />
-                <span className="font-bold text-xl">MMMh4CK CTFs</span>
-              </Link>
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <img src={Logo} alt="Logo" className="h-8 w-8" />
+              <span className="font-bold text-xl">MMMh4CK CTFs</span>
+            </Link>
             </div>
 
             <div className="flex items-center gap-4">

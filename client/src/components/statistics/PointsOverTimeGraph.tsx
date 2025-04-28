@@ -63,12 +63,12 @@ export default function PointsOverTimeGraph() {
       {
         label: "Points Over Time",
         data: pointsData.map(d => d.points),
-        borderColor: "#38bdf8", // soft blue
-        backgroundColor: "rgba(56, 189, 248, 0.2)", // soft blue fill
-        fill: true, // ✅ fill under the line
-        tension: 0.4, // smooth curve
-        pointRadius: 0, // ✅ no visible dots
-        pointHoverRadius: 4, // slight hover effect
+        borderColor: "#38bdf8",
+        backgroundColor: "rgba(56, 189, 248, 0.2)", 
+        fill: true, 
+        tension: 0.4, 
+        pointRadius: 0, 
+        pointHoverRadius: 4, 
         borderWidth: 2,
       },
     ],
@@ -90,22 +90,22 @@ export default function PointsOverTimeGraph() {
     scales: {
       x: {
         grid: {
-          color: "rgba(255, 255, 255, 0.05)", // super faint grid
-        },
-        ticks: {
-          color: "#94a3b8", // light gray
-          font: { size: 11 },
-        },
-      },
-      y: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.05)", // super faint grid
+          color: "rgba(255, 255, 255, 0.05)",
         },
         ticks: {
           color: "#94a3b8",
           font: { size: 11 },
         },
-        min: 0, // Y axis always starts at 0
+      },
+      y: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.05)", 
+        },
+        ticks: {
+          color: "#94a3b8",
+          font: { size: 11 },
+        },
+        min: 0, 
       },
     },
     responsive: true,

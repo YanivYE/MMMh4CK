@@ -11,7 +11,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
-        const submissions = await Submission.listByCurrentUser(); // ✅ call API
+        const submissions = await Submission.listByCurrentUser(); 
         setSubmissionHistory(submissions);
       } catch (err) {
         console.error("Failed to fetch submissions", err);

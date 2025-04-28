@@ -1,8 +1,6 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
-
-// Accept only these MIME types
-const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+import { allowedFileTypes } from "../../../shared/types/types";
 
 // 1 MB size limit
 const MAX_SIZE = 1 * 1024 * 1024;
@@ -12,7 +10,7 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  if (!allowedTypes.includes(file.mimetype)) {
+  if (!allowedFileTypes.includes(file.mimetype)) {
     return cb(new Error("Only .jpeg, .jpg, .png, .webp files are allowed!"));
   }
   cb(null, true);

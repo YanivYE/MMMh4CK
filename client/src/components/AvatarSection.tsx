@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { User as UserService } from "../entities/User";
+import { allowedFileTypes } from "../../../shared/types/types";
 
 interface AvatarSectionProps {
   profile: any;
@@ -17,11 +18,10 @@ export default function AvatarSection({ profile, onUpdate, showMessage }: Avatar
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     const maxSizeMB = 1;
   
     // Type check
-    if (!allowedTypes.includes(file.type)) {
+    if (!allowedFileTypes.includes(file.type)) {
       showMessage("error", "Only JPEG, JPG, PNG, or WEBP files are allowed.");
       return;
     }

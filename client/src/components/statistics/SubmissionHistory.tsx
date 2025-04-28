@@ -3,7 +3,7 @@ import { ChallengeCategory, categoryColors } from "../../../../shared/types/chal
 
 interface SubmissionHistoryProps {
   history: Submission[];
-  limit?: number; // Optional prop to limit how many to show
+  limit?: number; 
 }
 
 export default function SubmissionHistory({ history, limit }: SubmissionHistoryProps) {

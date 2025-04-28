@@ -7,7 +7,10 @@ import userRoutes from './routes/user.routes';
 import challengeRoutes from './routes/challenge.routes';
 import submissionRoutes from './routes/submission.routes'; 
 
-dotenv.config();
+dotenv.config({
+  path: "env/.env",
+});
+
 const app = express();
 
 app.use(cors({

@@ -21,7 +21,7 @@ const chartOptions = {
       labels: {
         usePointStyle: true,
         pointStyle: "circle",
-        color: "#d1d5db", // Tailwind gray-300
+        color: "#d1d5db", 
         padding: 12,
         font: {
           size: 14,
@@ -66,7 +66,7 @@ export default function CategoryPieChart() {
       {
         data: solvedCategories.map((cat) => categoryCounts[cat]),
         backgroundColor: solvedCategories.map((cat) => categoryHexColors[cat]),
-        borderColor: "#1f2937", // slate-800
+        borderColor: "#1f2937", 
         borderWidth: 2,
       },
     ],
